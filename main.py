@@ -1,3 +1,5 @@
+from auth import get_current_user, check_role
+from models import Usuario
 import httpx
 from fastapi import FastAPI, Depends, HTTPException, status, Header, Path
 
@@ -5,7 +7,8 @@ app = FastAPI()
 EXTERNAL_API_URL = "https://ea2p2assets-production.up.railway.app/"
 
 @app.get("/catalogo_productos")
-def obtener_productos(x_authentication: str = Header(...)):
+def obtener_productos(x_authentication: str = Header(...), user: Usuario = Depends(get_current_user)):
+    check_role(user, ["Administrador", "Mantenedor", "Usuario"])
     headers = {"x-authentication": x_authentication}
     
     try:
