@@ -36,7 +36,7 @@ async def cargar_productos_externos():
     async with httpx.AsyncClient() as client:
         try:
             headers = {"x-authentication": x_auth}
-            response = httpx.get(EXTERNAL_API_URL + "data/articulos", headers=headers)
+            response = await httpx.get(EXTERNAL_API_URL + "data/articulos", headers=headers)
             response.raise_for_status()
             productos = response.json()
             db = SessionLocal()
