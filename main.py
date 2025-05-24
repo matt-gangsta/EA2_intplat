@@ -33,10 +33,11 @@ def fecha_random_reciente():
 async def cargar_productos_externos():
     load_dotenv() 
     x_auth = os.getenv("EXTERNAL_API_TOKEN")
+    db = SessionLocal()
     async with httpx.AsyncClient() as client:
         try:
             headers = {"x-authentication": x_auth}
-            response = await httpx.get(EXTERNAL_API_URL + "data/articulos", headers=headers)
+            response = await client.get(EXTERNAL_API_URL + "data/articulos", headers=headers)
             response.raise_for_status()
             productos = response.json()
             db = SessionLocal()
