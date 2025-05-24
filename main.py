@@ -1,5 +1,3 @@
-import os
-print("STRIPE_API_KEY:", os.getenv("STRIPE_API_KEY"))
 from auth import get_current_user, check_role, fake_users
 import httpx
 from fastapi import FastAPI, Depends, HTTPException, status, Header, Path
@@ -10,15 +8,12 @@ from random import randint
 from sqlalchemy.orm import Session
 import random
 import stripe
-import uvicorn
 from dotenv import load_dotenv
+import os
+print("STRIPE_API_KEY:", os.getenv("STRIPE_API_KEY"))
+load_dotenv() 
 EXTERNAL_API_URL = "https://ea2p2assets-production.up.railway.app/"
 app = FastAPI()
-port = int(os.getenv("PORT", 8080))
-
-if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=port)
-    
 Base.metadata.create_all(bind=engine)
 
 def get_db():
