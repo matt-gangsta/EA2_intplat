@@ -1,3 +1,5 @@
+import os
+print("STRIPE_API_KEY:", os.getenv("STRIPE_API_KEY"))
 from auth import get_current_user, check_role, fake_users
 import httpx
 from fastapi import FastAPI, Depends, HTTPException, status, Header, Path
@@ -9,8 +11,6 @@ from sqlalchemy.orm import Session
 import random
 import stripe
 from dotenv import load_dotenv
-import os
-print("STRIPE_API_KEY:", os.getenv("STRIPE_API_KEY"))
 load_dotenv() 
 EXTERNAL_API_URL = "https://ea2p2assets-production.up.railway.app/"
 app = FastAPI()
