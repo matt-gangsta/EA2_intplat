@@ -63,6 +63,11 @@ def fecha_random_reciente():
 #        finally:
 #            db.close()#
 #
+
+@app.get("/")
+def read_root():
+    return {"status": "ok"}
+
 @app.post("/autenticar-usuario")
 
 def autenticar_usuario(nombre_usuario : str = Header(...), contrasena : str = Header(...)):
