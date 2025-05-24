@@ -10,7 +10,7 @@ import random
 import stripe
 from dotenv import load_dotenv
 import os
-
+print("STRIPE_API_KEY:", os.getenv("STRIPE_API_KEY"))
 load_dotenv() 
 EXTERNAL_API_URL = "https://ea2p2assets-production.up.railway.app/"
 app = FastAPI()
@@ -190,6 +190,7 @@ stripe.api_key = os.getenv("STRIPE_API_KEY")
 
 @app.post("/pago")
 def pago(data: PagoRequest, user: Usuario = Depends(get_current_user)):
+    print("Stripe Key:", stripe.api_key)
     check_role(user, ["admin", "service_account"])
     try:
         session = stripe.checkout.Session.create(
@@ -210,7 +211,7 @@ def pago(data: PagoRequest, user: Usuario = Depends(get_current_user)):
             success_url="https://ea2p2assets-production.up.railway.app/success.html",
             cancel_url="https://ea2p2assets-production.up.railway.app/cancel.html",
         )
-        return {"checkout_url": session.url}
+        return {"checkout_url": session.url, "Stripe Key:" : stripe.api_key}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error al crear la sesion de pago: {str(e)}")
 
