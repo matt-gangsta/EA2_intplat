@@ -29,40 +29,40 @@ def fecha_random_reciente():
     fecha_random = hace_60_dias + timedelta(days=random.randint(0, 60))
     return fecha_random.date()
 
-@app.on_event("startup")
-async def cargar_productos_externos():
-    load_dotenv() 
-    x_auth = os.getenv("EXTERNAL_API_TOKEN")
-    db = SessionLocal()
-    async with httpx.AsyncClient() as client:
-        try:
-            headers = {"x-authentication": x_auth}
-            response = await client.get(EXTERNAL_API_URL + "data/articulos", headers=headers)
-            response.raise_for_status()
-            productos = response.json()
-            db = SessionLocal()
+#@app.on_event("startup")
+#async def cargar_productos_externos():
+#    load_dotenv() 
+#    x_auth = os.getenv("EXTERNAL_API_TOKEN")
+#    db = SessionLocal()
+#    async with httpx.AsyncClient() as client:
+#        try:
+#            headers = {"x-authentication": x_auth}
+#            response = await client.get(EXTERNAL_API_URL + "data/articulos", headers=headers)
+#            response.raise_for_status()
+#            productos = response.json()
+#            db = SessionLocal()
 
-            for producto in productos:
-                pid = producto.get("id")
-                nombre = producto.get("nombre", "")
-                descripcion = producto.get("descripcion", "")
-                existe = db.query(ProductoInfo).filter_by(producto_id=pid).first()
-                if not existe:
-                    nuevo = ProductoInfo(
-                        producto_id=pid,
-                        nombre=nombre,
-                        descripcion=descripcion,
-                        fecha_agregado=fecha_random_reciente(),
-                        descuento=randint(5, 30),
-                        es_novedad=(date.today() - fecha_random_reciente()).days <= 30
-                    )
-                    db.add(nuevo)
-            db.commit()
-        except Exception as e:
-            print(f"Error al cargar productos: {e}")
-        finally:
-            db.close()
-
+#            for producto in productos:
+#                pid = producto.get("id")
+#                nombre = producto.get("nombre", "")
+#                descripcion = producto.get("descripcion", "")
+#                existe = db.query(ProductoInfo).filter_by(producto_id=pid).first()
+#                if not existe:
+#                    nuevo = ProductoInfo(
+#                        producto_id=pid,
+#                        nombre=nombre,
+#                        descripcion=descripcion,
+#                        fecha_agregado=fecha_random_reciente(),
+#                        descuento=randint(5, 30),
+#                        es_novedad=(date.today() - fecha_random_reciente()).days <= 30
+#                    )
+#                    db.add(nuevo)
+#            db.commit()
+#        except Exception as e:
+#            print(f"Error al cargar productos: {e}")
+#        finally:
+#            db.close()#
+#
 @app.post("/autenticar-usuario")
 
 def autenticar_usuario(nombre_usuario : str = Header(...), contrasena : str = Header(...)):
