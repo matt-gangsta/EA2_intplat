@@ -10,7 +10,6 @@ import random
 import stripe
 from dotenv import load_dotenv
 import os
-
 load_dotenv() 
 EXTERNAL_API_URL = "https://ea2p2assets-production.up.railway.app/"
 app = FastAPI()
